@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { auth, loginWithEmailAndPassword, loginWithGoogle } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [user, loading, error] = useAuthState(auth);
+  const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (loading) {
-  //     // maybe trigger a loading screen
-  //     return;
-  //   }
-  //   if (user) navigate("/dashboard");
-  // }, [user, loading]);
+  const state = useLocation();
+  useEffect(() => {
+    if (state === null || state === undefined) {
+      navigate("/");
+    }
+  });
+  useEffect(() => {
+    if (loading) {
+      // maybe trigger a loading screen
+      return;
+    }
+    if (user) navigate("/dashboard");
+  }, [user, loading]);
   return (
     <div className="login container">
-      {/* <NavBar /> */}
       <div className="login-container">
         <h1 className="title">Login</h1>
         <div className="field section box is-three-quarters">
@@ -42,10 +47,7 @@ function Login() {
             />
           </div>
           <div className="buttons">
-            <button
-              className="button"
-              onClick={() => loginWithEmailAndPassword(email, password)}
-            >
+            <button className="button" onClick={loginWithEmailAndPassword}>
               Login
             </button>
             <button className="button is-primary" onClick={loginWithGoogle}>

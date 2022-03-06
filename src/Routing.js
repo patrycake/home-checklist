@@ -1,10 +1,4 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Redirect,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Dashboard from "./routes/Dashboard";
 import Home from "./routes/Home";
 import Login from "./routes/Login";
@@ -13,44 +7,58 @@ import App from "./App";
 import { AuthContextProvider, useAuthState } from "./firebase";
 
 function Routing() {
-  const AuthenticatedRoute = ({ component: C, ...props }) => {
+  // function RequireAuth({ children }: { children: JSX.Element }) {
+  //   let auth = useAuth();
+  //   let location = useLocation();
+
+  //   if (!auth.user) {
+  //     // Redirect them to the /login page, but save the current location they were
+  //     // trying to go to when they were redirected. This allows us to send them
+  //     // along to that page after they login, which is a nicer user experience
+  //     // than dropping them off on the home page.
+  //     return <Navigate to="/login" state={{ from: location }} replace />;
+  //   }
+
+  //   return children;
+  // }
+  const RequireAuth = ({ component: C, ...props }) => {
+    console.log(C);
     const { isAuthenticated } = useAuthState();
+    let location = useLocation();
     console.log(`AuthenticatedRoute: ${isAuthenticated}`);
-    return (
-      <Route
-        {...props}
-        render={(routeProps) =>
-          isAuthenticated ? <C {...routeProps} /> : <Navigate to="/login" />
-        }
-      />
+    return isAuthenticated ? (
+      <C {...props} />
+    ) : (
+      <Navigate to="/login" state={{ from: location }} replace />
     );
   };
 
-  const UnauthenticatedRoute = ({ component: C, ...props }) => {
-    const { isAuthenticated } = useAuthState();
-    console.log(`UnauthenticatedRoute: ${isAuthenticated}`);
-    return (
-      <Route
-        {...props}
-        render={(routeProps) =>
-          !isAuthenticated ? <C {...routeProps} /> : <Navigate to="/" />
-        }
-      />
-    );
-  };
+  // const UnauthenticatedRoute = ({ component: C, ...props }) => {
+  //   const { isAuthenticated } = useAuthState();
+  //   console.log(`UnauthenticatedRoute: ${isAuthenticated}`);
+  //   return (
+  //     <Route
+  //       {...props}
+  //       render={(routeProps) =>
+  //         !isAuthenticated ? <C {...routeProps} /> : <Navigate to="/" />
+  //       }
+  //     />
+  //   );
+  // };
 
   return (
     <AuthContextProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <UnauthenticatedRoute index element={<Home />} />
-            <UnauthenticatedRoute path="signup" element={<SignUp />} />
-            <AuthenticatedRoute path="dashboard" element={<Dashboard />} />
-          </Route>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route index element={<Home />} />
+          <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<Login />} />
-        </Routes>
-      </BrowserRouter>
+          <Route
+            path="dashboard"
+            element={<RequireAuth component={Dashboard} />}
+          />
+        </Route>
+      </Routes>
     </AuthContextProvider>
   );
 }
