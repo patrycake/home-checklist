@@ -35,16 +35,21 @@ const AuthContext = createContext();
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* */
 const AuthContextProvider = (props) => {
   const [user, setUser] = useState();
   const [error, setError] = useState();
+  const [loading, setLoading] = useState();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(getAuth(), setUser, setError);
+    const unsubscribe = onAuthStateChanged(
+      getAuth(),
+      setUser,
+      setError,
+      setLoading(false)
+    );
     return () => unsubscribe();
   }, []);
-  return <AuthContext.Provider value={{ user, error }} {...props} />;
+  return <AuthContext.Provider value={{ user, error, loading }} {...props} />;
 };
 
 const useAuthState = () => {

@@ -18,15 +18,18 @@ function Login() {
     if (loading) {
       // maybe trigger a loading screen
       return;
-    }
-    if (user) navigate("/dashboard");
+    } else if (user) navigate("/dashboard");
   }, [user, loading]);
   return (
     <div className="login container">
-      <div className="login-container">
+      <div className="form-container">
         <h1 className="title">Login</h1>
         <div className="field section box is-three-quarters">
-          <div className="block container">
+          <div
+            className={
+              loading ? "bloak container is-loading" : "block container"
+            }
+          >
             <label className="label">Email</label>
             <input
               className="input is-primary"
@@ -36,7 +39,11 @@ function Login() {
               placeholder="E-mail Address"
             />
           </div>
-          <div className="block container">
+          <div
+            className={
+              loading ? "bloak container is-loading" : "block container"
+            }
+          >
             <label className="label">Password</label>
             <input
               type="password"

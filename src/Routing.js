@@ -4,23 +4,10 @@ import Home from "./routes/Home";
 import Login from "./routes/Login";
 import SignUp from "./routes/SignUp";
 import App from "./App";
+import Reset from "./routes/Reset";
 import { AuthContextProvider, useAuthState } from "./firebase";
 
 function Routing() {
-  // function RequireAuth({ children }: { children: JSX.Element }) {
-  //   let auth = useAuth();
-  //   let location = useLocation();
-
-  //   if (!auth.user) {
-  //     // Redirect them to the /login page, but save the current location they were
-  //     // trying to go to when they were redirected. This allows us to send them
-  //     // along to that page after they login, which is a nicer user experience
-  //     // than dropping them off on the home page.
-  //     return <Navigate to="/login" state={{ from: location }} replace />;
-  //   }
-
-  //   return children;
-  // }
   const RequireAuth = ({ component: C, ...props }) => {
     console.log(C);
     const { isAuthenticated } = useAuthState();
@@ -33,19 +20,6 @@ function Routing() {
     );
   };
 
-  // const UnauthenticatedRoute = ({ component: C, ...props }) => {
-  //   const { isAuthenticated } = useAuthState();
-  //   console.log(`UnauthenticatedRoute: ${isAuthenticated}`);
-  //   return (
-  //     <Route
-  //       {...props}
-  //       render={(routeProps) =>
-  //         !isAuthenticated ? <C {...routeProps} /> : <Navigate to="/" />
-  //       }
-  //     />
-  //   );
-  // };
-
   return (
     <AuthContextProvider>
       <Routes>
@@ -53,6 +27,7 @@ function Routing() {
           <Route index element={<Home />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<Login />} />
+          <Route path="reset" element={<Reset />} />
           <Route
             path="dashboard"
             element={<RequireAuth component={Dashboard} />}
