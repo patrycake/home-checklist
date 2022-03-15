@@ -9,7 +9,7 @@ import { AuthContextProvider, useAuthState } from "./firebase";
 
 function Routing() {
   const RequireAuth = ({ component: C, ...props }) => {
-    console.log(C);
+    // console.log(C);
     const { isAuthenticated } = useAuthState();
     let location = useLocation();
     console.log(`AuthenticatedRoute: ${isAuthenticated}`);

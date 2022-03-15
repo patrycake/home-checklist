@@ -18,7 +18,7 @@ export default function App() {
   //     if (user) navigate("/dashboard");
   //   }, [user, loading]);
   const { isAuthenticated } = useAuthState();
-  console.log(isAuthenticated);
+  // console.log(isAuthenticated);
   return (
     <div className="app">
       <nav className="navbar block" role="navigation">
@@ -35,8 +35,11 @@ export default function App() {
           </Navbar.Container>
           <Navbar.Container align="end">
             {isAuthenticated ? (
-              <Navbar.Item href="#">
+              <Navbar.Item href="#" renderAs={Button.Group}>
                 <Button onClick={logout}>Log Off </Button>
+                <Button color="primary" renderAs={Link} to="dashboard">
+                  Dashboard
+                </Button>
               </Navbar.Item>
             ) : (
               <Navbar.Item href="#" renderAs={Button.Group}>

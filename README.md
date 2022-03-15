@@ -17,3 +17,5 @@
  <https://github.com/firebase/quickstart-js/blob/master/auth/customauth.html>
 
  <https://medium.com/bithubph/how-to-build-an-authentication-system-in-react-using-firebase-2717103ee197>
+
+ <https://devtrium.com/posts/async-functions-useeffect>

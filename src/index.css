@@ -4,6 +4,24 @@
   --info: #638b76;
 } */
 
+html,
+body,
+#root,
+.app,
+.dashboard {
+  width: 100%;
+  height: 100vh;
+}
+
 .form-container {
   max-width: 500px;
+}
+
+.model-bg {
+  position: fixed !important;
+}
+
+.column {
+  flex-basis: auto !important;
+  max-width: 800px;
 }

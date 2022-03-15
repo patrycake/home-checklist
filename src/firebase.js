@@ -57,11 +57,16 @@ const useAuthState = () => {
   return { ...auth, isAuthenticated: auth.user != null };
 };
 
+//forces the choose account when logging in
 const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+  prompt: "select_account",
+});
 const loginWithGoogle = async () => {
   try {
     const res = await signInWithPopup(auth, googleProvider);
     const user = res.user;
+
     const q = query(collection(db, "users"), where("uid", "==", user.uid));
     const docs = await getDocs(q);
     if (docs.docs.length === 0) {
@@ -70,6 +75,28 @@ const loginWithGoogle = async () => {
         name: user.displayName,
         authProvider: "google",
         email: user.email,
+        data: [
+          {
+            name: "alarm-detectors",
+            description:
+              "Check to make sure your smoke alarms and monoxide detectors are still functional.",
+            completed: [false, false],
+            frequency: 2,
+          },
+          {
+            name: "gutters",
+            description:
+              "Clean leaves and debris also check for any water damage.",
+            completed: [false, false, false, false],
+            frequency: 4,
+          },
+          {
+            name: "hvac",
+            description: "Check heater and air conditioning ",
+            completed: [false, false, false, false],
+            frequency: 4,
+          },
+        ],
       });
     }
   } catch (err) {
@@ -95,6 +122,28 @@ const registerWithEmailAndPassword = async (name, email, password) => {
       name,
       authProvider: "local",
       email,
+      data: [
+        {
+          name: "alarm-detectors",
+          description:
+            "Check to make sure your smoke alarms and monoxide detectors are still functional.",
+          completed: [false, false],
+          frequency: 2,
+        },
+        {
+          name: "gutters",
+          description:
+            "Clean leaves and debris also check for any water damage.",
+          completed: [false, false, false, false],
+          frequency: 4,
+        },
+        {
+          name: "hvac",
+          description: "Check heater and air conditioning ",
+          completed: [false, false, false, false],
+          frequency: 4,
+        },
+      ],
     });
   } catch (err) {
     console.error(err);
